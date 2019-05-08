@@ -1,5 +1,5 @@
 # SDL_FontCache
-A generic font caching C library with loading and rendering support for SDL.
+A generic font caching C++ library with loading and rendering support for SDL.
 
 SDL_FontCache loads, caches, and renders TrueType fonts using SDL_ttf.  
 It fully supports UTF-8 strings and includes some utility functions for manipulating them.
@@ -18,3 +18,5 @@ FC_Draw(font, renderer, 0, 0, "This is %s.\n It works.", "example text");
 
 FC_FreeFont(font);
 ```
+
+Original version written in C by [grimfang4](https://github.com/grimfang4/)
