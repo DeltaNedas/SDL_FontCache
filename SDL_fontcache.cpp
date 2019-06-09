@@ -1657,7 +1657,10 @@ static FC_Rect FC_RenderLeft(FC_Font* font, FC_Target* dest, float x, float y, F
 }
 
 static FC_Rect FC_RenderLeft(FC_Font* font, FC_Target* dest, float x, float y, FC_Scale scale, std::string text) {
-	return FC_RenderLeft(font, dest, x, y, scale, stringtochar(text));
+	char* textC = stringtochar(text);
+	FC_Rect res = FC_RenderLeft(font, dest, x, y, scale, textC);
+	free(textC);
+	return res;
 }
 
 static void set_color_for_all_caches(FC_Font* font, SDL_Color color)
@@ -1680,7 +1683,7 @@ FC_Rect FC_Draw(FC_Font* font, FC_Target* dest, float x, float y, std::string fo
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
-
+	free(formattedText);
 	set_color_for_all_caches(font, font->default_color);
 
 	return FC_RenderLeft(font, dest, x, y, FC_MakeScale(1,1), fc_buffer);
@@ -1746,6 +1749,7 @@ static FC_StringList* FC_Explode(std::string text, char delimiter) {
 	// Doesn't technically support UTF-8, but it's probably fine, right?
 	size = 0;
 	start = end = textC;
+	free(textC);
 	while (true) {
 		if (*end == delimiter || *end == '\0') {
 			*node = (FC_StringList*)malloc(sizeof(FC_StringList));
@@ -1908,6 +1912,7 @@ FC_Rect FC_DrawBox(FC_Font* font, FC_Target* dest, FC_Rect box, std::string form
 	}
 	
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	useClip = has_clip(dest);
 	FC_Rect oldclip, newclip;
@@ -1941,6 +1946,7 @@ FC_Rect FC_DrawBoxAlign(FC_Font* font, FC_Target* dest, FC_Rect box, FC_AlignEnu
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	useClip = has_clip(dest);
 	FC_Rect oldclip, newclip;
@@ -1973,6 +1979,7 @@ FC_Rect FC_DrawBoxScale(FC_Font* font, FC_Target* dest, FC_Rect box, FC_Scale sc
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	useClip = has_clip(dest);
 	FC_Rect oldclip, newclip;
@@ -2005,6 +2012,7 @@ FC_Rect FC_DrawBoxColor(FC_Font* font, FC_Target* dest, FC_Rect box, SDL_Color c
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	useClip = has_clip(dest);
 	FC_Rect oldclip, newclip;
@@ -2037,6 +2045,7 @@ FC_Rect FC_DrawBoxEffect(FC_Font* font, FC_Target* dest, FC_Rect box, FC_Effect 
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	useClip = has_clip(dest);
 	FC_Rect oldclip, newclip;
@@ -2071,6 +2080,7 @@ FC_Rect FC_DrawColumn(FC_Font* font, FC_Target* dest, float x, float y, Uint16 w
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	set_color_for_all_caches(font, font->default_color);
 
@@ -2089,6 +2099,7 @@ FC_Rect FC_DrawColumnAlign(FC_Font* font, FC_Target* dest, float x, float y, Uin
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	set_color_for_all_caches(font, font->default_color);
 
@@ -2118,6 +2129,7 @@ FC_Rect FC_DrawColumnScale(FC_Font* font, FC_Target* dest, float x, float y, Uin
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	set_color_for_all_caches(font, font->default_color);
 
@@ -2136,6 +2148,7 @@ FC_Rect FC_DrawColumnColor(FC_Font* font, FC_Target* dest, float x, float y, Uin
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	set_color_for_all_caches(font, color);
 
@@ -2154,6 +2167,7 @@ FC_Rect FC_DrawColumnEffect(FC_Font* font, FC_Target* dest, float x, float y, Ui
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	set_color_for_all_caches(font, effect.color);
 
@@ -2235,7 +2249,10 @@ static FC_Rect FC_RenderRight(FC_Font* font, FC_Target* dest, float x, float y, 
 }
 
 static FC_Rect FC_RenderRight(FC_Font* font, FC_Target* dest, float x, float y, FC_Scale scale, std::string text) {
-	return FC_RenderRight(font, dest, x, y, scale, stringtochar(text));
+	char* textC = stringtochar(text);
+	FC_Rect res = FC_RenderRight(font, dest, x, y, scale, textC);
+	free(textC);
+	return res;
 }
 
 
@@ -2246,6 +2263,7 @@ FC_Rect FC_DrawScale(FC_Font* font, FC_Target* dest, float x, float y, FC_Scale 
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	set_color_for_all_caches(font, font->default_color);
 
@@ -2259,6 +2277,7 @@ FC_Rect FC_DrawAlign(FC_Font* font, FC_Target* dest, float x, float y, FC_AlignE
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	set_color_for_all_caches(font, font->default_color);
 
@@ -2289,6 +2308,7 @@ FC_Rect FC_DrawColor(FC_Font* font, FC_Target* dest, float x, float y, SDL_Color
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	set_color_for_all_caches(font, color);
 
@@ -2303,6 +2323,7 @@ FC_Rect FC_DrawEffect(FC_Font* font, FC_Target* dest, float x, float y, FC_Effec
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	set_color_for_all_caches(font, effect.color);
 
@@ -2365,7 +2386,10 @@ Uint16 FC_GetHeight(FC_Font* font, char* formatted_text, ...) {
 }
 
 Uint16 FC_GetHeight(FC_Font* font, std::string text_formatted, ...) {
-	return FC_GetHeight(font, stringtochar(text_formatted));
+	char* textFormatted = stringtochar(text_formatted);
+	Uint16 res = FC_GetHeight(font, textFormatted);
+	free(textFormatted);
+	return res;
 }
 
 Uint16 FC_GetWidth(FC_Font* font, char* formatted_text, ...) {
@@ -2398,7 +2422,10 @@ Uint16 FC_GetWidth(FC_Font* font, char* formatted_text, ...) {
 }
 
 Uint16 FC_GetWidth(FC_Font* font, std::string text_formatted, ...) {
-	return FC_GetWidth(font, stringtochar(text_formatted));
+	char* textFormatted = stringtochar(text_formatted);
+	Uint16 res = FC_GetWidth(font, textFormatted);
+	free(textFormatted);
+	return res;
 }
 
 // If width == -1, use no width limit
@@ -2414,6 +2441,7 @@ FC_Rect FC_GetCharacterOffset(FC_Font* font, Uint16 position_index, int column_w
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	ls = FC_GetBufferFitToColumn(font, column_width, FC_MakeScale(1,1), 1);
 	for (iter = ls; iter != NULL;) {
@@ -2469,6 +2497,7 @@ Uint16 FC_GetColumnHeight(FC_Font* font, Uint16 width, std::string formatted_tex
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	ls = FC_GetBufferFitToColumn(font, width, FC_MakeScale(1,1), 0);
 	for (iter = ls; iter != NULL; iter = iter->next) {
@@ -2518,6 +2547,7 @@ int FC_GetAscent(FC_Font* font, std::string formatted_text, ...) {
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	max = 0;
 	c = fc_buffer;
@@ -2550,6 +2580,7 @@ int FC_GetDescent(FC_Font* font, std::string formatted_text, ...) {
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	max = 0;
 	c = fc_buffer;
@@ -2621,6 +2652,7 @@ FC_Rect FC_GetBounds(FC_Font* font, float x, float y, FC_AlignEnum align, FC_Sca
 	// Create a temp buffer while GetWidth and GetHeight use fc_buffer.
 	char* temp = (char*) malloc(fc_buffer_size);
 	FC_EXTRACT_VARARGS(temp, formattedText);
+	free(formattedText);
 
 	result.w = FC_GetWidth(font, "%s", temp) * scale.x;
 	result.h = FC_GetHeight(font, "%s", temp) * scale.y;
@@ -2662,6 +2694,7 @@ Uint16 FC_GetPositionFromOffset(FC_Font* font, float x, float y, int column_widt
 	}
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	ls = FC_GetBufferFitToColumn(font, column_width, FC_MakeScale(1,1), 1);
 	for (iter = ls; iter != NULL; iter = iter->next) {
@@ -2704,6 +2737,7 @@ int FC_GetWrappedText(FC_Font* font, char* result, int max_result_size, Uint16 w
 		return 0;
 
 	FC_EXTRACT_VARARGS(fc_buffer, formattedText);
+	free(formattedText);
 
 	ls = FC_GetBufferFitToColumn(font, width, FC_MakeScale(1,1), 0);
 	int size_so_far = 0;
