@@ -39,7 +39,7 @@ uninstall:
 	rm -f $(SDL_HEADERS)/SDL_fontcache.h
 
 $(OBJECTDIR)/%.o: $(SOURCEDIR)/%.cpp
-	mkdir -p $(OBJECTDIR)
+	mkdir -p $(shell dirname $@)
 	sed -i 's/$(VERSION_REPLACE)/$(VERSION)/g' $^ # Replace @@VERSION@@ with the version.
 	$(CXX) $(CXXFLAGS) -o $@ $^
 	sed -i 's/$(VERSION)/$(VERSION_REPLACE)/g' $^ # Replace the version with @@VERSION@@ to not break it.
