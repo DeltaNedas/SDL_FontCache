@@ -29,14 +29,14 @@ all: $(LIBRARY)
 
 install: $(all)
 	cp -f $(BUILDDIR)/* $(SDL_BINARIES)
-	ln -sf $(SDL_BINARIES)$(SHARED_MAJOR) $(SDL_BINARIES)$(SHARED_PATCH)
-	ln -sf $(SDL_BINARIES)$(SHARED_MINOR) $(SDL_BINARIES)$(SHARED_PATCH)
-	ln -sf $(SDL_BINARIES)$(SHARED) $(SDL_BINARIES)$(SHARED_PATCH)
+	ln -sf $(SDL_BINARIES)$(SHARED_PATCH) $(SDL_BINARIES)$(SHARED_MAJOR)
+	ln -sf $(SDL_BINARIES)$(SHARED_PATCH) $(SDL_BINARIES)$(SHARED_MINOR)
+	ln -sf $(SDL_BINARIES)$(SHARED_PATCH) $(SDL_BINARIES)$(SHARED)
 	cp -f $(SOURCEDIR)/SDL_fontcache.h $(SDL_HEADERS)
 
 uninstall:
 	rm -f $(SDL_BINARIES)$(PREFIX)$(LIBRARY)*
-	rm -f $(SDL_HEADERS)/SDL_fontcache.h
+	rm -f $(SDL_HEADERS)SDL_fontcache.h
 
 $(OBJECTDIR)/%.o: $(SOURCEDIR)/%.cpp
 	mkdir -p $(shell dirname $@)
