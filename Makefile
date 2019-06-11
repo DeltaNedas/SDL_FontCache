@@ -1,28 +1,48 @@
-CXX = g++-8
-CXXFLAGS = -O3 -Wall -std=c++17 -I. -c -g
-LDFLAGS = -c -lSDL2 -lSDL2_ttf -Wl,-rpath,'$$ORIGIN' -static
+VERSION = 0.10.2
+VERSION_REPLACE = @@VERSION@@
 
 BUILDDIR = build
-SDL_BINARIES = /usr/lib/gcc/x86_64-linux-gnu/8/
+OBJECTDIR = objects
+SOURCEDIR = src
+
+CXX = g++
+CXXFLAGS = -O3 -Wall -Weffc++ -ansi -pedantic -std=c++17 -I$(SOURCEDIR) -c -fPIC -g
+LDFLAGS = -shared -L$(SOURCEDIR) -lSDL2 -lSDL2_ttf
+
+SDL_BINARIES = /usr/lib/gcc/x86_64-linux-gnu/
 SDL_HEADERS = /usr/include/SDL2/
 
-OUT_FILE = libSDL2_fontcache.a
-OBJ = SDL_fontcache.cpp.o
-OBJECTS = $(patsubst %, $(BUILDDIR)/%, $(OBJ))
+LIBRARY = SDL2_fontcache
+OBJ = SDL_fontcache
+OBJECTS = $(patsubst %, $(OBJECTDIR)/%.o, $(OBJ))
 
-all: $(OUT_FILE)
+PREFIX = lib
+SHARED = .so.$(VERSION)
+STATIC = .a
 
-install: $(OUT_FILE)
-	cp $(OUT_FILE) $(SDL_BINARIES)
-	cp SDL_fontcache.h $(SDL_HEADERS)
+all: $(LIBRARY)
 
-$(BUILDDIR)/%.cpp.o: %.cpp 
-	mkdir -p $(BUILDDIR)
+install: $(all)
+	cp -f $(BUILDDIR)/* $(SDL_BINARIES)
+	cp -f $(SOURCEDIR)/SDL_fontcache.h $(SDL_HEADERS)
+
+uninstall:
+	rm -f $(SDL_BINARIES)$(PREFIX)$(LIBRARY)*
+	rm -f $(SDL_HEADERS)/SDL_fontcache.h
+
+$(OBJECTDIR)/%.o: $(SOURCEDIR)/%.cpp
+	mkdir -p $(OBJECTDIR)
+	sed -i 's/$(VERSION_REPLACE)/$(VERSION)/g' $^ # Replace @@VERSION@@ with the version.
 	$(CXX) $(CXXFLAGS) -o $@ $^
+	sed -i 's/$(VERSION)/$(VERSION_REPLACE)/g' $^ # Replace the version with @@VERSION@@ to not break it.
 
-$(OUT_FILE): $(OBJECTS)
-	ar rcs $(OUT_FILE) $(OBJECTS)
+$(LIBRARY): $(OBJECTS)
+	mkdir -p $(BUILDDIR)
+	$(CXX) -o $(BUILDDIR)/$(PREFIX)$@$(SHARED) $^ $(LDFLAGS)
+	ar rcs $(BUILDDIR)/$(PREFIX)$@$(STATIC) $^
 
 clean:
-	rm -f $(BUILDDIR)/*.cpp.o
-	rm -f $(OUT_FILE)
+	rm -rf $(OBJECTDIR)
+	rm -rf $(BUILDDIR)
+
+remake: clean $(LIBRARY)

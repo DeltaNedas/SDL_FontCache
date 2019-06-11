@@ -11,7 +11,7 @@ See SDL_FontCache.h for license info.
 #include <stdlib.h>
 
 std::string FC_GetVersion() {
-	return "v0.10.1";
+	return "@@VERSION@@";
 }
 
 // Visual C does not support static inline
