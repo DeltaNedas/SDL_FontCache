@@ -1,4 +1,7 @@
-VERSION = 0.10.2
+MAJOR = 0
+MINOR = 10
+PATCH = 2
+VERSION = $(MAJOR).$(MINOR).$(PATCH)
 VERSION_REPLACE = @@VERSION@@
 
 BUILDDIR = build
@@ -9,21 +12,26 @@ CXX = g++
 CXXFLAGS = -O3 -Wall -Weffc++ -ansi -pedantic -std=c++17 -I$(SOURCEDIR) -c -fPIC -g
 LDFLAGS = -shared -L$(SOURCEDIR) -lSDL2 -lSDL2_ttf
 
-SDL_BINARIES = /usr/lib/gcc/x86_64-linux-gnu/
+SDL_BINARIES = /usr/lib/x86_64-linux-gnu/
 SDL_HEADERS = /usr/include/SDL2/
 
 LIBRARY = SDL2_fontcache
 OBJ = SDL_fontcache
 OBJECTS = $(patsubst %, $(OBJECTDIR)/%.o, $(OBJ))
 
-PREFIX = lib
-SHARED = .so.$(VERSION)
-STATIC = .a
+SHARED = lib$(LIBRARY).so
+SHARED_MAJOR = $(SHARED).$(MAJOR)
+SHARED_MINOR = $(SHARED).$(MAJOR).$(MINOR)
+SHARED_PATCH = $(SHARED).$(VERSION)
+STATIC = lib$(LIBRARY).a
 
 all: $(LIBRARY)
 
 install: $(all)
 	cp -f $(BUILDDIR)/* $(SDL_BINARIES)
+	ln -sf $(SDL_BINARIES)$(SHARED_MAJOR) $(SDL_BINARIES)$(SHARED_PATCH)
+	ln -sf $(SDL_BINARIES)$(SHARED_MINOR) $(SDL_BINARIES)$(SHARED_PATCH)
+	ln -sf $(SDL_BINARIES)$(SHARED) $(SDL_BINARIES)$(SHARED_PATCH)
 	cp -f $(SOURCEDIR)/SDL_fontcache.h $(SDL_HEADERS)
 
 uninstall:
@@ -38,8 +46,8 @@ $(OBJECTDIR)/%.o: $(SOURCEDIR)/%.cpp
 
 $(LIBRARY): $(OBJECTS)
 	mkdir -p $(BUILDDIR)
-	$(CXX) -o $(BUILDDIR)/$(PREFIX)$@$(SHARED) $^ $(LDFLAGS)
-	ar rcs $(BUILDDIR)/$(PREFIX)$@$(STATIC) $^
+	$(CXX) -o $(BUILDDIR)/$(SHARED_PATCH) $^ $(LDFLAGS)
+	ar rcs $(BUILDDIR)/$(STATIC) $^
 
 clean:
 	rm -rf $(OBJECTDIR)
