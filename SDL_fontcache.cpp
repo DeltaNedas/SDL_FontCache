@@ -1072,7 +1072,7 @@ Uint8 FC_SetGlyphCacheLevel(FC_Font* font, int cache_level, FC_Image* cache_text
 }
 
 
-FC_Font* FC_CreateFont(void)
+FC_Font* FC_CreateFont()
 {
 	FC_Font* font;
 

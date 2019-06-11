@@ -1,6 +1,6 @@
 CXX = g++-8
 CXXFLAGS = -O3 -Wall -std=c++17 -I. -c -g
-LDFLAGS = -c -lSDL2 -lSDL2_ttf -Wl,-rpath,'$$ORIGIN'
+LDFLAGS = -c -lSDL2 -lSDL2_ttf -Wl,-rpath,'$$ORIGIN' -static
 
 BUILDDIR = build
 SDL_BINARIES = /usr/lib/gcc/x86_64-linux-gnu/8/
